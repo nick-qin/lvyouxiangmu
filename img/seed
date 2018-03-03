@@ -1,0 +1,78 @@
+var lsm = {
+    data: [],
+    clear: function() {
+        this.data = [];
+    },   // Reset Data
+    ur: function(userid) {
+        this.pd({
+            "action":"user_register",
+            "userid":userid
+        });
+    },  // User Register
+    ul: function(userid) {
+        this.pd({
+            "action":"user_login",
+            "userid":userid
+        });
+    },  // User Login
+    vi: function(itemid,itemtype) {
+        this.pd({
+            "action":"view_item",
+            "itemid":itemid,
+            "itemtype":itemtype
+        });
+    },    // View Item
+    ac: function(itemid,itemtype,startdate) {
+        this.pd({
+            "action":"add_cart",
+            "itemid":itemid,
+            "itemtype":itemtype,
+            "startdate":startdate
+        });
+    },  // Add Cart
+    co: function(orderid,currency,amount,paytype) {
+        this.pd({
+            "action":"create_order",
+            "orderid":orderid,
+            "currency":currency,
+            "amount":amount,
+            "paytype":paytype
+        });
+    },   // Create Order
+    fo: function(orderid,currency,amount,paytype) {
+        this.pd({
+            "action":"finish_order",
+            "orderid":orderid,
+            "currency":currency,
+            "amount":amount,
+            "paytype":paytype
+        });
+    },   // Finish Order
+    coi: function(orderid,orderitemid,itemid,itemtype,itemname,itembrand,startdate,amount) {
+        this.pd({
+            "action":"create_orderitem",
+            "orderid":orderid,
+            "orderitemid":orderitemid,
+            "itemid":itemid,
+            "itemtype":itemtype,
+            "itemname":itemname,
+            "itembrand":itembrand,
+            "startdate":startdate,
+            "amount":amount
+        });
+    },   // Create Order Item
+    pd: function(data) {
+        this.data.push(data);
+    }, // Push Data
+    sd: function() {
+        var json = JSON.stringify(this.data);
+        $.ajax({
+            url:document.location.protocol+"//sdc.lulutrip.com/track/record",
+            type:"POST",
+            data:{data:json},
+            dataType:"JSONP",
+            jsonp:"callback",
+            jsonpCallback:"lsm"
+        });
+    }    // Send Data
+};
